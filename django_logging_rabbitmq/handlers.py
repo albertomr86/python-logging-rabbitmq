@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import logging
-import threading
 import pika
 from pika import credentials
 from formatters import JSONFormatter
