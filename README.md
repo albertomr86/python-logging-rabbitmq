@@ -4,7 +4,7 @@ Logging handler to ships logs to RabbitMQ. Compatible with Django.
 ## Installation
 Install using pip.
 ```sh
-pip install django_logging_rabbitmq
+pip install python_logging_rabbitmq
 ```
 After this, you should be able to import the handler directly as follows:
 ```python
@@ -143,7 +143,7 @@ LOGGING = {
   'handlers': {
     'rabbit': {
         'level': 'DEBUG',
-        'class': 'django_logging_rabbitmq.RabbitMQHandler',
+        'class': 'python_logging_rabbitmq.RabbitMQHandler',
         'host': 'localhost'
     }
   },
@@ -166,7 +166,7 @@ LOGGING = {
   'handlers': {
     'rabbit': {
         'level': 'DEBUG',
-        'class': 'django_logging_rabbitmq.RabbitMQHandler',
+        'class': 'python_logging_rabbitmq.RabbitMQHandler',
         'host': 'localhost',
         'port': 5672,
         'username': 'guest',
@@ -208,7 +208,7 @@ LOGGING = {
     'handlers': {
         'rabbit': {
             'level': 'DEBUG',
-            'class': 'django_logging_rabbitmq.RabbitMQHandler',
+            'class': 'python_logging_rabbitmq.RabbitMQHandler',
             'host': 'localhost',
             'formatter': 'standard'
         }
@@ -241,7 +241,7 @@ LOGGING = {
     'handlers': {
         'rabbit': {
             'level': 'DEBUG',
-            'class': 'django_logging_rabbitmq.RabbitMQHandler',
+            'class': 'python_logging_rabbitmq.RabbitMQHandler',
             'host': 'localhost',
             'formatter': 'json'
         }

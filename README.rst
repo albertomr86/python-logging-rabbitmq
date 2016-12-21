@@ -10,7 +10,7 @@ Install using pip.
 
 .. code:: sh
 
-    pip install django_logging_rabbitmq
+    pip install python_logging_rabbitmq
 
 After this, you should be able to import the handler directly as
 follows:
@@ -204,7 +204,7 @@ config <https://docs.djangoproject.com/en/1.9/topics/logging/#configuring-loggin
       'handlers': {
         'rabbit': {
             'level': 'DEBUG',
-            'class': 'django_logging_rabbitmq.RabbitMQHandler',
+            'class': 'python_logging_rabbitmq.RabbitMQHandler',
             'host': 'localhost'
         }
       },
@@ -231,7 +231,7 @@ handle directly when declaring it in the config:
       'handlers': {
         'rabbit': {
             'level': 'DEBUG',
-            'class': 'django_logging_rabbitmq.RabbitMQHandler',
+            'class': 'python_logging_rabbitmq.RabbitMQHandler',
             'host': 'localhost',
             'port': 5672,
             'username': 'guest',
@@ -275,7 +275,7 @@ Custom formatter
         'handlers': {
             'rabbit': {
                 'level': 'DEBUG',
-                'class': 'django_logging_rabbitmq.RabbitMQHandler',
+                'class': 'python_logging_rabbitmq.RabbitMQHandler',
                 'host': 'localhost',
                 'formatter': 'standard'
             }
@@ -310,7 +310,7 @@ JSON formatter
         'handlers': {
             'rabbit': {
                 'level': 'DEBUG',
-                'class': 'django_logging_rabbitmq.RabbitMQHandler',
+                'class': 'python_logging_rabbitmq.RabbitMQHandler',
                 'host': 'localhost',
                 'formatter': 'json'
             }
