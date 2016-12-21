@@ -60,7 +60,7 @@ class RabbitMQHandler(logging.Handler):
             self.addFilter(FieldFilter(self.fields, self.fields_under_root))
 
         # Connect.
-        self.emit_lock = threading.Lock()
+        self.createLock()
         self.open_connection()
 
     def open_connection(self):
@@ -86,7 +86,7 @@ class RabbitMQHandler(logging.Handler):
             self.exchange_declared = True
 
     def emit(self, record):
-        self.emit_lock.acquire()
+        self.acquire()
 
         try:
             if not self.connection or not self.channel:
@@ -107,7 +107,7 @@ class RabbitMQHandler(logging.Handler):
             self.channel, self.connection = None, None
             self.handleError(record)
         finally:
-            self.emit_lock.release()
+            self.release()
 
     def close(self):
         """
