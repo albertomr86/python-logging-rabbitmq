@@ -1,4 +1,4 @@
-#python-logging-rabbitmq
+# python-logging-rabbitmq
 Logging handler to ships logs to RabbitMQ. Compatible with Django.
 
 ## Installation

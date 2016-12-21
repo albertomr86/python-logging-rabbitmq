@@ -1,11 +1,10 @@
 from setuptools import setup, find_packages
 
 CLASSIFIERS = [
-    'Development Status :: 5 - Production/Stable'
+    'Development Status :: 5 - Production/Stable',
     'Intended Audience :: Developers',
     'License :: OSI Approved :: MIT License',
     'Operating System :: OS Independent',
-    'Topic :: Software Development :: Libraries :: Python Module',
     'Programming Language :: Python',
     'Programming Language :: Python :: 2',
     'Programming Language :: Python :: 2.7',
