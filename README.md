@@ -50,7 +50,29 @@ As result, a similar message as follows will be sent to RabbitMQ:
    "levelname":"DEBUG"
 }
 ```
-Like in the example, when create the handler, you're able to specify different parameters in order to connect to RabbitMQ or configure the handler behaviour.
+
+##Sending logs
+By default, logs will be sent to RabbitMQ using the exchange **'log'**, this should be of **type topic**. The **routing key** used is formed by concatenating the *logger name* and the *log level*. For example:
+```python
+import logging
+from python_logging_rabbitmq import RabbitMQHandler
+
+logger = logging.getLogger('myapp')
+logger.setLevel(logging.DEBUG)
+logger.addHandler(RabbitMQHandler(host='localhost', port=5672))
+
+logger.info('test info')
+logger.debug('test debug')
+logger.warn('test warning')
+```
+Three messages will be sent using the following routing keys:
+ - myapp.INFO
+ - myapp.DEBUG
+ - myapp.WARN
+
+For an explanation about topics and routing keys go to https://www.rabbitmq.com/tutorials/tutorial-five-python.html
+
+When create the handler, you're able to specify different parameters in order to connect to RabbitMQ or configure the handler behavior.
 
 ## Configuration
 These are the configuration allowed:
