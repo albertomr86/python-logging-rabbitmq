@@ -8,7 +8,7 @@ from filters import FieldFilter
 
 class RabbitMQHandler(logging.Handler):
     """
-    Django/Python logging handler to ship logs to RabbitMQ.
+    Python/Django logging handler to ship logs to RabbitMQ.
     Inspired by: https://github.com/ziXiong/MQHandler
     """
 
