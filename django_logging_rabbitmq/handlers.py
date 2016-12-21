@@ -68,6 +68,16 @@ class RabbitMQHandler(logging.Handler):
         Connect to RabbitMQ.
         """
 
+        # Set logger for pika.
+        # See if something went wrong connecting to RabbitMQ.
+        handler = logging.StreamHandler()
+        handler.setFormatter(self.formatter)
+        rabbitmq_logger = logging.getLogger('pika')
+        rabbitmq_logger.addHandler(handler)
+        rabbitmq_logger.propagate = False
+        rabbitmq_logger.setLevel(logging.WARNING)
+
+        # Connect.
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(**self.connection_params))
         self.channel = self.connection.channel()
 
