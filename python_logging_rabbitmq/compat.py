@@ -9,11 +9,6 @@ else:
     text_type = str
 
 try:
-    from unittest.mock import patch, Mock
+    import ujson as json  # noqa: F401
 except ImportError:
-    from mock import patch, Mock
-
-try:
-    import ujson as json
-except ImportError:
-    import json
+    import json  # noqa: F401

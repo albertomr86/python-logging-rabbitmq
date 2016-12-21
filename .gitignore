@@ -1,3 +1,6 @@
 dist/
 django_logging_rabbitmq.egg-infon
 build/
+.idea/
+*.pyc
+.DS_Store
