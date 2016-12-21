@@ -54,18 +54,20 @@ Like in the example, when create the handler, you're able to specify different p
 
 ## Configuration
 These are the configuration allowed:
-| Parameter         | Description                                                                                                                              | Default                               |
-|-------------------|------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------|
-| host              | RabbitMQ Server hostname or ip address.                                                                                                  | localhost                             |
-| port              | RabbitMQ Server port.                                                                                                                    | 5672                                  |
-| username          | Username for authentication.                                                                                                             | None                                  |
-| password          | Provide a password for the username.                                                                                                     | None                                  |
-| exchange          | Name of the exchange to publish the logs. This exchange is considered of type topic.                                                     | log                                   |
-| declare_exchange  | Whether or not to declare the exchange.                                                                                                  | False                                 |
-| connection_params | Allow extra params to connect with RabbitMQ.                                                                                             | None                                  |
-| formatter         | Use custom formatter for the logs.                                                                                                       | python_logging_rabbitmq.JSONFormatter |
-| fields            | Dict to add as a field in each logs send to RabbitMQ. This is useful when you want fields in each log but without pass them every time.  | None                                  |
-| fields_under_root | When is True, each key in parameter 'fields' will be added as an entry in the log, otherwise they will be logged under the key 'fields'. | True                                  |
+
+| Parameter         	| Description                                                                                                                              	| Default                               	|
+|-------------------	|------------------------------------------------------------------------------------------------------------------------------------------	|---------------------------------------	|
+| host              	| RabbitMQ Server hostname or ip address.                                                                                                  	| localhost                             	|
+| port              	| RabbitMQ Server port.                                                                                                                    	| 5672                                  	|
+| username          	| Username for authentication.                                                                                                             	| None                                  	|
+| password          	| Provide a password for the username.                                                                                                     	| None                                  	|
+| exchange          	| Name of the exchange to publish the logs. This exchange is considered of type topic.                                                     	| log                                   	|
+| declare_exchange  	| Whether or not to declare the exchange.                                                                                                  	| False                                 	|
+| connection_params 	| Allow extra params to connect with RabbitMQ.                                                                                             	| None                                  	|
+| formatter         	| Use custom formatter for the logs.                                                                                                       	| python_logging_rabbitmq.JSONFormatter 	|
+| fields            	| Dict to add as a field in each logs send to RabbitMQ. This is useful when you want fields in each log but without pass them every time.  	| None                                  	|
+| fields_under_root 	| When is True, each key in parameter 'fields' will be added as an entry in the log, otherwise they will be logged under the key 'fields'. 	| True                                  	|
+
 
 ### Examples
 #### RabbitMQ Connection
