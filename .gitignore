@@ -1,5 +1,5 @@
 dist/
-django_logging_rabbitmq.egg-infon
+python_logging_rabbitmq.egg-info/
 build/
 .idea/
 *.pyc
