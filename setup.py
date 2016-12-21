@@ -33,6 +33,9 @@ setup(name='python-logging-rabbitmq',
       classifiers=CLASSIFIERS,
       install_requires=INSTALL_REQUIRES,
       packages=find_packages(),
+      extras_require={
+          'dev': ['check-manifest']
+      },
 
       test_suite='nose.collector',
       tests_require=['nose'],
