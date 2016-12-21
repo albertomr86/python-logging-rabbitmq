@@ -19,7 +19,7 @@ INSTALL_REQUIRES = [
 ]
 
 setup(name='python-logging-rabbitmq',
-      version='1.0.0',
+      version='1.0.1',
 
       url='https://github.com/albertomr86/python-logging-rabbitmq',
       description='Send logs to RabbitMQ from Python/Django',
