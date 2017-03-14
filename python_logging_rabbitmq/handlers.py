@@ -16,6 +16,7 @@ class RabbitMQHandler(logging.Handler):
                  host='localhost', port=5672, connection_params=None,
                  username=None, password=None,
                  exchange='log', declare_exchange=False,
+                 close_after_emit=False,
                  fields=None, fields_under_root=True):
         """
         Initialize the handler.
@@ -29,6 +30,7 @@ class RabbitMQHandler(logging.Handler):
         :param password:          Password for the username.
         :param exchange:          Send logs using this exchange.
         :param declare_exchange:  Whether or not to declare the exchange.
+        :param close_after_emit:  Close connection after emit the record?
         :param fields:            Send these fields as part of all logs.
         :param fields_under_root: Merge the fields in the root object.
         """
@@ -40,6 +42,7 @@ class RabbitMQHandler(logging.Handler):
         self.connection = None
         self.channel = None
         self.exchange_declared = not declare_exchange
+        self.close_after_emit = close_after_emit
 
         # Connection parameters.
         # Allow extra params when connect to RabbitMQ.
@@ -60,7 +63,6 @@ class RabbitMQHandler(logging.Handler):
 
         # Connect.
         self.createLock()
-        self.open_connection()
 
     def open_connection(self):
         """
@@ -76,9 +78,11 @@ class RabbitMQHandler(logging.Handler):
         rabbitmq_logger.propagate = False
         rabbitmq_logger.setLevel(logging.WARNING)
 
-        # Connect.
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters(**self.connection_params))
-        self.channel = self.connection.channel()
+        if not self.connection or self.connection.is_closed:
+            self.connection = pika.BlockingConnection(pika.ConnectionParameters(**self.connection_params))
+
+        if not self.channel or self.channel.is_closed:
+            self.channel = self.connection.channel()
 
         if self.exchange_declared is False:
             self.channel.exchange_declare(exchange=self.exchange, type='topic', durable=True, auto_delete=False)
@@ -87,11 +91,24 @@ class RabbitMQHandler(logging.Handler):
         # Manually remove logger to avoid shutdown message.
         rabbitmq_logger.removeHandler(handler)
 
+    def close_connection(self):
+        """
+        Close active connection.
+        """
+
+        if self.channel:
+            self.channel.close()
+
+        if self.connection:
+            self.connection.close()
+
+        self.connection, self.channel = None, None
+
     def emit(self, record):
         self.acquire()
 
         try:
-            if not self.connection or not self.channel:
+            if not self.connection or self.connection.is_closed or not self.channel or self.channel.is_closed:
                 self.open_connection()
 
             routing_key = "{name}.{level}".format(name=record.name, level=record.levelname)
@@ -109,6 +126,9 @@ class RabbitMQHandler(logging.Handler):
             self.channel, self.connection = None, None
             self.handleError(record)
         finally:
+            if self.close_after_emit:
+                self.close_connection()
+
             self.release()
 
     def close(self):
@@ -119,10 +139,13 @@ class RabbitMQHandler(logging.Handler):
         self.acquire()
 
         try:
-            if self.channel:
-                self.channel.close()
-
-            if self.connection:
-                self.connection.close()
+            self.close_connection()
         finally:
             self.release()
+
+    def __del__(self):
+        """
+        Close when destroy de instance.
+        """
+
+        self.close()
