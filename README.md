@@ -6,10 +6,23 @@ Install using pip.
 ```sh
 pip install python_logging_rabbitmq
 ```
-After this, you should be able to import the handler directly as follows:
+
+## Handlers
+This package has two built-in handlers that you can import as follows:
 ```python
 from python_logging_rabbitmq import RabbitMQHandler
 ```
+
+or (thanks to [@wallezhang](https://github.com/wallezhang))
+
+```python
+from python_logging_rabbitmq import RabbitMQHandlerOneWay
+```
+
+| Handler               | Description                                                                                                                                                                                                                                                                                  |
+|-----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| RabbitMQHandler       | Basic handler for sending logs to RabbitMQ. Every record will be delivered directly to RabbitMQ using the exchange configured.                                                                                                                                                               |
+| RabbitMQHandlerOneWay | High throughput handler. Initializes an internal queue where logs are stored temporarily. A thread is used to deliver the logs to RabbitMQ using the exchange configured. Your app doesn't need to wait until the log is delivered. Notice that if the main thread dies you might lose logs. |
 
 ## Standalone python
 To use with python first create a logger for your app, then create an instance of the handler and add it to the logger created.
@@ -51,7 +64,7 @@ As result, a similar message as follows will be sent to RabbitMQ:
 }
 ```
 
-##Sending logs
+## Sending logs
 By default, logs will be sent to RabbitMQ using the exchange **'log'**, this should be of **type topic**. The **routing key** used is formed by concatenating the *logger name* and the *log level*. For example:
 ```python
 import logging
@@ -65,7 +78,7 @@ logger.info('test info')
 logger.debug('test debug')
 logger.warn('test warning')
 ```
-Three messages will be sent using the following routing keys:
+The messages will be sent using the following routing keys:
  - myapp.INFO
  - myapp.DEBUG
  - myapp.WARN
@@ -77,18 +90,19 @@ When create the handler, you're able to specify different parameters in order to
 ## Configuration
 These are the configuration allowed:
 
-| Parameter         	| Description                                                                                                                              	| Default                               	|
-|-------------------	|------------------------------------------------------------------------------------------------------------------------------------------	|---------------------------------------	|
-| host              	| RabbitMQ Server hostname or ip address.                                                                                                  	| localhost                             	|
-| port              	| RabbitMQ Server port.                                                                                                                    	| 5672                                  	|
-| username          	| Username for authentication.                                                                                                             	| None                                  	|
-| password          	| Provide a password for the username.                                                                                                     	| None                                  	|
-| exchange          	| Name of the exchange to publish the logs. This exchange is considered of type topic.                                                     	| log                                   	|
-| declare_exchange  	| Whether or not to declare the exchange.                                                                                                  	| False                                 	|
-| connection_params 	| Allow extra params to connect with RabbitMQ.                                                                                             	| None                                  	|
-| formatter         	| Use custom formatter for the logs.                                                                                                       	| python_logging_rabbitmq.JSONFormatter 	|
-| fields            	| Dict to add as a field in each logs send to RabbitMQ. This is useful when you want fields in each log but without pass them every time.  	| None                                  	|
-| fields_under_root 	| When is True, each key in parameter 'fields' will be added as an entry in the log, otherwise they will be logged under the key 'fields'. 	| True                                  	|
+| Parameter         | Description                                                                                                                              | Default                               |
+|-------------------|------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------|
+| host              | RabbitMQ Server hostname or ip address.                                                                                                  | localhost                             |
+| port              | RabbitMQ Server port.                                                                                                                    | 5672                                  |
+| username          | Username for authentication.                                                                                                             | None                                  |
+| password          | Provide a password for the username.                                                                                                     | None                                  |
+| exchange          | Name of the exchange to publish the logs. This exchange is considered of type topic.                                                     | log                                   |
+| declare_exchange  | Whether or not to declare the exchange.                                                                                                  | False                                 |
+| connection_params | Allow extra params to connect with RabbitMQ.                                                                                             | None                                  |
+| formatter         | Use custom formatter for the logs.                                                                                                       | python_logging_rabbitmq.JSONFormatter |
+| close_after_emit  | Close the active connection after send a log. A new connection is open for the next log.                                                 | False                                 |
+| fields            | Dict to add as a field in each logs send to RabbitMQ. This is useful when you want fields in each log but without pass them every time.  | None                                  |
+| fields_under_root | When is True, each key in parameter 'fields' will be added as an entry in the log, otherwise they will be logged under the key 'fields'. | True                                  |
 
 
 ### Examples
@@ -255,6 +269,15 @@ LOGGING = {
     }
 }
 ```
+
+## Releases
+| Date         | Version | Notes                                                    |
+|--------------|---------|----------------------------------------------------------|
+| Mar 16,2017  | 1.0.4   | Added new handler RabbitMQHandlerOneWay (by [@wallezhang](https://github.com/wallezhang)). |
+| Mar 14, 2017 | 1.0.3   | Added config parameter close_after_emit.                 |
+| Dec 21, 2016 | 1.0.2   | Minor fixes.                                             |
+| Dec 21, 2016 | 1.0.1   | Minor fixes.                                             |
+| Dec 21, 2016 | 1.0.0   | Initial release.                                         |
 
 ## What's next?
  - Let's talk about tests.
