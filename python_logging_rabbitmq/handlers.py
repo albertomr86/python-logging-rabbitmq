@@ -2,8 +2,8 @@
 import logging
 import pika
 from pika import credentials
-from formatters import JSONFormatter
-from filters import FieldFilter
+from .formatters import JSONFormatter
+from .filters import FieldFilter
 
 
 class RabbitMQHandler(logging.Handler):

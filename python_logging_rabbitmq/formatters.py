@@ -1,8 +1,8 @@
 # coding: utf-8
 import logging
 from socket import gethostname
-from compat import json
-from compat import text_type
+from .compat import json
+from .compat import text_type
 
 
 class JSONFormatter(logging.Formatter):

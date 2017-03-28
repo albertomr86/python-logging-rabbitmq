@@ -6,8 +6,8 @@ from Queue import Queue
 import pika
 from pika import credentials
 
-from filters import FieldFilter
-from formatters import JSONFormatter
+from .filters import FieldFilter
+from .formatters import JSONFormatter
 
 
 class RabbitMQHandlerOneWay(logging.Handler):
