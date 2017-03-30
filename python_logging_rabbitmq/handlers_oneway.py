@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import threading
-from Queue import Queue
+from .compat import Queue
 
 import pika
 from pika import credentials
