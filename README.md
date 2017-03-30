@@ -273,8 +273,9 @@ LOGGING = {
 ## Releases
 | Date         | Version | Notes                                                    |
 |--------------|---------|----------------------------------------------------------|
+| Mar 30, 2017 | 1.0.6   | Fix compatibility with python3 in RabbitMQHandlerOneWay (by [@sactre](https://github.com/sactre)). |
 | Mar 28, 2017 | 1.0.5   | Explicit local imports.                                  |
-| Mar 16,2017  | 1.0.4   | Added new handler RabbitMQHandlerOneWay (by [@wallezhang](https://github.com/wallezhang)). |
+| Mar 16, 2017 | 1.0.4   | Added new handler RabbitMQHandlerOneWay (by [@wallezhang](https://github.com/wallezhang)). |
 | Mar 14, 2017 | 1.0.3   | Added config parameter close_after_emit.                 |
 | Dec 21, 2016 | 1.0.2   | Minor fixes.                                             |
 | Dec 21, 2016 | 1.0.1   | Minor fixes.                                             |
