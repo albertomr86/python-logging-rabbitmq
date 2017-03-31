@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 import logging
 import threading
-from Queue import Queue
+
 
 import pika
 from pika import credentials
 
 from .filters import FieldFilter
 from .formatters import JSONFormatter
+from .compat import Queue
 
 
 class RabbitMQHandlerOneWay(logging.Handler):
