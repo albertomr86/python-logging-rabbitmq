@@ -20,23 +20,24 @@ class RabbitMQHandlerOneWay(logging.Handler):
                  host='localhost', port=5672, connection_params=None,
                  username=None, password=None,
                  exchange='log', declare_exchange=False,
-                 close_after_emit=False,
+                 routing_key_format="{name}.{level}", close_after_emit=False,
                  fields=None, fields_under_root=True):
         """
         Initialize the handler.
 
-        :param level:             Logs level.
-        :param formatter:         Use custom formatter for the logs.
-        :param host:              RabbitMQ host. Default localhost
-        :param port:              RabbitMQ Port. Default 5672
-        :param connection_params: Allow extra params to connect with RabbitMQ.
-        :param username:          Username in case of authentication.
-        :param password:          Password for the username.
-        :param exchange:          Send logs using this exchange.
-        :param declare_exchange:  Whether or not to declare the exchange.
-        :param close_after_emit:  Close connection after emit the record?
-        :param fields:            Send these fields as part of all logs.
-        :param fields_under_root: Merge the fields in the root object.
+        :param level:              Logs level.
+        :param formatter:          Use custom formatter for the logs.
+        :param host:               RabbitMQ host. Default localhost
+        :param port:               RabbitMQ Port. Default 5672
+        :param connection_params:  Allow extra params to connect with RabbitMQ.
+        :param username:           Username in case of authentication.
+        :param password:           Password for the username.
+        :param exchange:           Send logs using this exchange.
+        :param declare_exchange:   Whether or not to declare the exchange.
+        :param routing_key_format: Customize how messages will be routed to the queues.
+        :param close_after_emit:   Close connection after emit the record?
+        :param fields:             Send these fields as part of all logs.
+        :param fields_under_root:  Merge the fields in the root object.
         """
 
         super(RabbitMQHandlerOneWay, self).__init__(level=level)
@@ -46,6 +47,7 @@ class RabbitMQHandlerOneWay(logging.Handler):
         self.connection = None
         self.channel = None
         self.exchange_declared = not declare_exchange
+        self.routing_key_format = routing_key_format
         self.close_after_emit = close_after_emit
 
         # Connection parameters.
@@ -146,7 +148,7 @@ class RabbitMQHandlerOneWay(logging.Handler):
 
     def emit(self, record):
         try:
-            routing_key = "{name}.{level}".format(name=record.name, level=record.levelname)
+            routing_key = self.routing_key_format.format(name=record.name, level=record.levelname)
             self.queue.put((record, routing_key))
         except Exception:
             self.channel, self.connection = None, None

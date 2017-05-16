@@ -90,19 +90,20 @@ When create the handler, you're able to specify different parameters in order to
 ## Configuration
 These are the configuration allowed:
 
-| Parameter         | Description                                                                                                                              | Default                               |
-|-------------------|------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------|
-| host              | RabbitMQ Server hostname or ip address.                                                                                                  | localhost                             |
-| port              | RabbitMQ Server port.                                                                                                                    | 5672                                  |
-| username          | Username for authentication.                                                                                                             | None                                  |
-| password          | Provide a password for the username.                                                                                                     | None                                  |
-| exchange          | Name of the exchange to publish the logs. This exchange is considered of type topic.                                                     | log                                   |
-| declare_exchange  | Whether or not to declare the exchange.                                                                                                  | False                                 |
-| connection_params | Allow extra params to connect with RabbitMQ.                                                                                             | None                                  |
-| formatter         | Use custom formatter for the logs.                                                                                                       | python_logging_rabbitmq.JSONFormatter |
-| close_after_emit  | Close the active connection after send a log. A new connection is open for the next log.                                                 | False                                 |
-| fields            | Dict to add as a field in each logs send to RabbitMQ. This is useful when you want fields in each log but without pass them every time.  | None                                  |
-| fields_under_root | When is True, each key in parameter 'fields' will be added as an entry in the log, otherwise they will be logged under the key 'fields'. | True                                  |
+| Parameter          | Description                                                                                                                              | Default                               |
+|--------------------|------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------|
+| host               | RabbitMQ Server hostname or ip address.                                                                                                  | localhost                             |
+| port               | RabbitMQ Server port.                                                                                                                    | 5672                                  |
+| username           | Username for authentication.                                                                                                             | None                                  |
+| password           | Provide a password for the username.                                                                                                     | None                                  |
+| exchange           | Name of the exchange to publish the logs. This exchange is considered of type topic.                                                     | log                                   |
+| declare_exchange   | Whether or not to declare the exchange.                                                                                                  | False                                 |
+| routing_key_format | Customize how messages are routed to the queues.                                                                                         | {name}.{level}                        |
+| connection_params  | Allow extra params to connect with RabbitMQ.                                                                                             | None                                  |
+| formatter          | Use custom formatter for the logs.                                                                                                       | python_logging_rabbitmq.JSONFormatter |
+| close_after_emit   | Close the active connection after send a log. A new connection is open for the next log.                                                 | False                                 |
+| fields             | Dict to add as a field in each logs send to RabbitMQ. This is useful when you want fields in each log but without pass them every time.  | None                                  |
+| fields_under_root  | When is True, each key in parameter 'fields' will be added as an entry in the log, otherwise they will be logged under the key 'fields'. | True                                  |
 
 
 ### Examples
@@ -273,6 +274,7 @@ LOGGING = {
 ## Releases
 | Date         | Version | Notes                                                    |
 |--------------|---------|----------------------------------------------------------|
+| May 15, 2017 | 1.0.7   | Adding support to customize the routing_key (Thanks to [@hansyulian](https://github.com/hansyulian)). |
 | Mar 30, 2017 | 1.0.6   | Fix compatibility with python3 in RabbitMQHandlerOneWay (by [@sactre](https://github.com/sactre)). |
 | Mar 28, 2017 | 1.0.5   | Explicit local imports.                                  |
 | Mar 16, 2017 | 1.0.4   | Added new handler RabbitMQHandlerOneWay (by [@wallezhang](https://github.com/wallezhang)). |
