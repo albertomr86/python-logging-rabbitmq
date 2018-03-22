@@ -3,4 +3,4 @@ from .formatters import JSONFormatter  # noqa: F401
 from .handlers import RabbitMQHandler  # noqa: F401
 from .handlers_oneway import RabbitMQHandlerOneWay  # noqa: F401
 
-__version__ = '1.0.7'
+__version__ = '1.0.8'

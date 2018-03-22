@@ -104,6 +104,7 @@ These are the configuration allowed:
 | close_after_emit   | Close the active connection after send a log. A new connection is open for the next log.                                                 | False                                 |
 | fields             | Dict to add as a field in each logs send to RabbitMQ. This is useful when you want fields in each log but without pass them every time.  | None                                  |
 | fields_under_root  | When is True, each key in parameter 'fields' will be added as an entry in the log, otherwise they will be logged under the key 'fields'. | True                                  |
+| message_headers    | A dictionary of headers to be published with the message.                                                                                | None                                  |
 
 
 ### Examples
@@ -274,6 +275,7 @@ LOGGING = {
 ## Releases
 | Date         | Version | Notes                                                    |
 |--------------|---------|----------------------------------------------------------|
+| Mar 21, 2018 | 1.0.8   | Allowing message headers (Thanks to [@merretbuurman](https://github.com/merretbuurman)). |
 | May 15, 2017 | 1.0.7   | Adding support to customize the routing_key (Thanks to [@hansyulian](https://github.com/hansyulian)). |
 | Mar 30, 2017 | 1.0.6   | Fix compatibility with python3 in RabbitMQHandlerOneWay (by [@sactre](https://github.com/sactre)). |
 | Mar 28, 2017 | 1.0.5   | Explicit local imports.                                  |
