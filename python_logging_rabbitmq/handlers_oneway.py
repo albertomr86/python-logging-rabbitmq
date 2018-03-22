@@ -21,7 +21,7 @@ class RabbitMQHandlerOneWay(logging.Handler):
                  username=None, password=None,
                  exchange='log', declare_exchange=False,
                  routing_key_format="{name}.{level}", close_after_emit=False,
-                 fields=None, fields_under_root=True):
+                 fields=None, fields_under_root=True, message_headers=None):
         """
         Initialize the handler.
 
@@ -30,6 +30,7 @@ class RabbitMQHandlerOneWay(logging.Handler):
         :param host:               RabbitMQ host. Default localhost
         :param port:               RabbitMQ Port. Default 5672
         :param connection_params:  Allow extra params to connect with RabbitMQ.
+        :param message_headers:    A dictionary of headers to be published with the message. Optional.
         :param username:           Username in case of authentication.
         :param password:           Password for the username.
         :param exchange:           Send logs using this exchange.
@@ -59,6 +60,9 @@ class RabbitMQHandlerOneWay(logging.Handler):
 
         if username and password:
             self.connection_params['credentials'] = credentials.PlainCredentials(username, password)
+
+        # Extra params for message publication
+        self.message_headers = message_headers
 
         # Logging.
         self.formatter = formatter
@@ -135,7 +139,8 @@ class RabbitMQHandlerOneWay(logging.Handler):
                     routing_key=routing_key,
                     body=self.format(record),
                     properties=pika.BasicProperties(
-                        delivery_mode=2
+                        delivery_mode=2,
+                        headers=self.message_headers
                     )
                 )
             except Exception:
