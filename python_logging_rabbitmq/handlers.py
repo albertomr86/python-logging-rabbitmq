@@ -92,7 +92,7 @@ class RabbitMQHandler(logging.Handler):
             self.channel = self.connection.channel()
 
         if self.exchange_declared is False:
-            self.channel.exchange_declare(exchange=self.exchange, type='topic', durable=True, auto_delete=False)
+            self.channel.exchange_declare(exchange=self.exchange, exchange_type='topic', durable=True, auto_delete=False)
             self.exchange_declared = True
 
         # Manually remove logger to avoid shutdown message.
