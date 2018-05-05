@@ -275,6 +275,7 @@ LOGGING = {
 ## Releases
 | Date         | Version | Notes                                                    |
 |--------------|---------|----------------------------------------------------------|
+| May 04, 2018 | 1.0.9   | Fixed exchange_type parameter in channel.exchange_declare (Thanks to [@cklos](https://github.com/cklos)). |
 | Mar 21, 2018 | 1.0.8   | Allowing message headers (Thanks to [@merretbuurman](https://github.com/merretbuurman)). |
 | May 15, 2017 | 1.0.7   | Adding support to customize the routing_key (Thanks to [@hansyulian](https://github.com/hansyulian)). |
 | Mar 30, 2017 | 1.0.6   | Fix compatibility with python3 in RabbitMQHandlerOneWay (by [@sactre](https://github.com/sactre)). |
