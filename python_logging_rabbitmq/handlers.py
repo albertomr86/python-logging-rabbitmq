@@ -13,12 +13,13 @@ class RabbitMQHandler(logging.Handler):
     Python/Django logging handler to ship logs to RabbitMQ.
     Inspired by: https://github.com/ziXiong/MQHandler
     """
-    def __init__(self, level=logging.NOTSET, formatter=JSONFormatter(),
+    def __init__(self, level=logging.NOTSET, formatter=None,
                  host='localhost', port=5672, connection_params=None,
                  username=None, password=None,
                  exchange='log', declare_exchange=False,
                  routing_key_format="{name}.{level}", close_after_emit=False,
-                 fields=None, fields_under_root=True, message_headers=None):
+                 fields=None, fields_under_root=True, message_headers=None,
+                 record_fields=None, exclude_record_fields=None):
         # Initialize the handler.
         #
         # :param level:              Logs level.
@@ -59,7 +60,10 @@ class RabbitMQHandler(logging.Handler):
         self.message_headers = message_headers
 
         # Logging.
-        self.formatter = formatter
+        self.formatter = formatter or JSONFormatter(
+            include=record_fields,
+            exclude=exclude_record_fields
+        )
         self.fields = fields if isinstance(fields, dict) else {}
         self.fields_under_root = fields_under_root
 
