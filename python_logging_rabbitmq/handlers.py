@@ -17,25 +17,29 @@ class RabbitMQHandler(logging.Handler):
                  host='localhost', port=5672, connection_params=None,
                  username=None, password=None,
                  exchange='log', declare_exchange=False,
-                 routing_key_format="{name}.{level}", close_after_emit=False,
+                 routing_key_format="{name}.{level}",
+                 routing_key_formatter=None,
+                 close_after_emit=False,
                  fields=None, fields_under_root=True, message_headers=None,
                  record_fields=None, exclude_record_fields=None):
         # Initialize the handler.
         #
-        # :param level:              Logs level.
-        # :param formatter:          Use custom formatter for the logs.
-        # :param host:               RabbitMQ host. Default localhost
-        # :param port:               RabbitMQ Port. Default 5672
-        # :param connection_params:  Allow extra params to connect with RabbitMQ.
-        # :param message_headers:    A dictionary of headers to be published with the message. Optional.
-        # :param username:           Username in case of authentication.
-        # :param password:           Password for the username.
-        # :param exchange:           Send logs using this exchange.
-        # :param declare_exchange:   Whether or not to declare the exchange.
-        # :param routing_key_format: Customize how messages will be routed to the queues.
-        # :param close_after_emit:   Close connection after emit the record?
-        # :param fields:             Send these fields as part of all logs.
-        # :param fields_under_root:  Merge the fields in the root object.
+        # :param level:                 Logs level.
+        # :param formatter:             Use custom formatter for the logs.
+        # :param host:                  RabbitMQ host. Default localhost
+        # :param port:                  RabbitMQ Port. Default 5672
+        # :param connection_params:     Allow extra params to connect with RabbitMQ.
+        # :param message_headers:       A dictionary of headers to be published with the message. Optional.
+        # :param username:              Username in case of authentication.
+        # :param password:              Password for the username.
+        # :param exchange:              Send logs using this exchange.
+        # :param declare_exchange:      Whether or not to declare the exchange.
+        # :param routing_key_format:    Customize how messages will be routed to the queues.
+        # :param routing_key_formatter: Override how messages will be routed to the queues.
+        #                               Formatter is passed record object.
+        # :param close_after_emit:      Close connection after emit the record?
+        # :param fields:                Send these fields as part of all logs.
+        # :param fields_under_root:     Merge the fields in the root object.
         super(RabbitMQHandler, self).__init__(level=level)
 
         # Important instances/properties.
@@ -58,6 +62,9 @@ class RabbitMQHandler(logging.Handler):
 
         # Extra params for message publication
         self.message_headers = message_headers
+
+        # Save routing-key formatter.
+        self.routing_key_formatter = routing_key_formatter
 
         # Logging.
         self.formatter = formatter or JSONFormatter(
@@ -118,7 +125,13 @@ class RabbitMQHandler(logging.Handler):
             if not self.connection or self.connection.is_closed or not self.channel or self.channel.is_closed:
                 self.open_connection()
 
-            routing_key = self.routing_key_format.format(name=record.name, level=record.levelname)
+            if self.routing_key_formatter:
+                routing_key = self.routing_key_formatter(record)
+            else:
+                routing_key = self.routing_key_format.format(
+                    name=record.name,
+                    level=record.levelname
+                )
 
             self.channel.basic_publish(
                 exchange=self.exchange,

@@ -87,6 +87,22 @@ For an explanation about topics and routing keys go to https://www.rabbitmq.com/
 
 When create the handler, you're able to specify different parameters in order to connect to RabbitMQ or configure the handler behavior.
 
+## Overidding routing-key creation
+
+If you wish override routing-key format entirely, you can pass
+`routing_key_formatter` function which takes `LogRecord` objects and returns
+routing-key. For example:
+
+```python
+RabbitMQHandler(
+    host='localhost',
+    port=5672,
+    routing_key_formatter=lambda r: (
+        'some_exchange_prefix.{}'.format(r.levelname.lower())
+    )
+)
+```
+
 ## Configuration
 These are the configuration allowed:
 
