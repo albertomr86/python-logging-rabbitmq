@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import logging
+
 import pika
 from pika import credentials
-from .formatters import JSONFormatter
+
 from .filters import FieldFilter
+from .formatters import JSONFormatter
 
 
 class RabbitMQHandler(logging.Handler):
@@ -11,32 +13,29 @@ class RabbitMQHandler(logging.Handler):
     Python/Django logging handler to ship logs to RabbitMQ.
     Inspired by: https://github.com/ziXiong/MQHandler
     """
-
-    def __init__(self, level=logging.NOTSET, formatter=JSONFormatter(),
+    def __init__(self, level=logging.NOTSET, formatter=None,
                  host='localhost', port=5672, connection_params=None,
                  username=None, password=None,
                  exchange='log', declare_exchange=False,
                  routing_key_format="{name}.{level}", close_after_emit=False,
-                 fields=None, fields_under_root=True, message_headers=None):
-        """
-        Initialize the handler.
-
-        :param level:              Logs level.
-        :param formatter:          Use custom formatter for the logs.
-        :param host:               RabbitMQ host. Default localhost
-        :param port:               RabbitMQ Port. Default 5672
-        :param connection_params:  Allow extra params to connect with RabbitMQ.
-        :param message_headers:    A dictionary of headers to be published with the message. Optional.
-        :param username:           Username in case of authentication.
-        :param password:           Password for the username.
-        :param exchange:           Send logs using this exchange.
-        :param declare_exchange:   Whether or not to declare the exchange.
-        :param routing_key_format: Customize how messages will be routed to the queues.
-        :param close_after_emit:   Close connection after emit the record?
-        :param fields:             Send these fields as part of all logs.
-        :param fields_under_root:  Merge the fields in the root object.
-        """
-
+                 fields=None, fields_under_root=True, message_headers=None,
+                 record_fields=None, exclude_record_fields=None):
+        # Initialize the handler.
+        #
+        # :param level:              Logs level.
+        # :param formatter:          Use custom formatter for the logs.
+        # :param host:               RabbitMQ host. Default localhost
+        # :param port:               RabbitMQ Port. Default 5672
+        # :param connection_params:  Allow extra params to connect with RabbitMQ.
+        # :param message_headers:    A dictionary of headers to be published with the message. Optional.
+        # :param username:           Username in case of authentication.
+        # :param password:           Password for the username.
+        # :param exchange:           Send logs using this exchange.
+        # :param declare_exchange:   Whether or not to declare the exchange.
+        # :param routing_key_format: Customize how messages will be routed to the queues.
+        # :param close_after_emit:   Close connection after emit the record?
+        # :param fields:             Send these fields as part of all logs.
+        # :param fields_under_root:  Merge the fields in the root object.
         super(RabbitMQHandler, self).__init__(level=level)
 
         # Important instances/properties.
@@ -61,7 +60,10 @@ class RabbitMQHandler(logging.Handler):
         self.message_headers = message_headers
 
         # Logging.
-        self.formatter = formatter
+        self.formatter = formatter or JSONFormatter(
+            include=record_fields,
+            exclude=exclude_record_fields
+        )
         self.fields = fields if isinstance(fields, dict) else {}
         self.fields_under_root = fields_under_root
 
@@ -75,7 +77,6 @@ class RabbitMQHandler(logging.Handler):
         """
         Connect to RabbitMQ.
         """
-
         # Set logger for pika.
         # See if something went wrong connecting to RabbitMQ.
         handler = logging.StreamHandler()
@@ -102,7 +103,6 @@ class RabbitMQHandler(logging.Handler):
         """
         Close active connection.
         """
-
         if self.channel:
             self.channel.close()
 
@@ -143,7 +143,6 @@ class RabbitMQHandler(logging.Handler):
         """
         Free resources.
         """
-
         self.acquire()
 
         try:
@@ -155,5 +154,4 @@ class RabbitMQHandler(logging.Handler):
         """
         Close when destroy de instance.
         """
-
         self.close()

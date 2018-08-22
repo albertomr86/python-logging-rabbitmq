@@ -6,7 +6,6 @@ class FieldFilter(logging.Filter):
     Filter to add extra fields before log the record.
     @alternative: https://docs.python.org/2/library/logging.html#loggeradapter-objects
     """
-
     def __init__(self, fields, fields_under_root):
         super(FieldFilter, self).__init__()
 

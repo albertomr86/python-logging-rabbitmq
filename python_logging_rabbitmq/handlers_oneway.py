@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import logging
 import threading
-from .compat import Queue
 
 import pika
 from pika import credentials
 
+from .compat import Queue
 from .filters import FieldFilter
 from .formatters import JSONFormatter
 
@@ -15,32 +15,28 @@ class RabbitMQHandlerOneWay(logging.Handler):
     Python/Django logging handler to ship logs to RabbitMQ.
     Inspired by: https://github.com/ziXiong/MQHandler
     """
-
     def __init__(self, level=logging.NOTSET, formatter=JSONFormatter(),
                  host='localhost', port=5672, connection_params=None,
                  username=None, password=None,
                  exchange='log', declare_exchange=False,
                  routing_key_format="{name}.{level}", close_after_emit=False,
                  fields=None, fields_under_root=True, message_headers=None):
-        """
-        Initialize the handler.
-
-        :param level:              Logs level.
-        :param formatter:          Use custom formatter for the logs.
-        :param host:               RabbitMQ host. Default localhost
-        :param port:               RabbitMQ Port. Default 5672
-        :param connection_params:  Allow extra params to connect with RabbitMQ.
-        :param message_headers:    A dictionary of headers to be published with the message. Optional.
-        :param username:           Username in case of authentication.
-        :param password:           Password for the username.
-        :param exchange:           Send logs using this exchange.
-        :param declare_exchange:   Whether or not to declare the exchange.
-        :param routing_key_format: Customize how messages will be routed to the queues.
-        :param close_after_emit:   Close connection after emit the record?
-        :param fields:             Send these fields as part of all logs.
-        :param fields_under_root:  Merge the fields in the root object.
-        """
-
+        # Initialize the handler.
+        #
+        # :param level:              Logs level.
+        # :param formatter:          Use custom formatter for the logs.
+        # :param host:               RabbitMQ host. Default localhost
+        # :param port:               RabbitMQ Port. Default 5672
+        # :param connection_params:  Allow extra params to connect with RabbitMQ.
+        # :param message_headers:    A dictionary of headers to be published with the message. Optional.
+        # :param username:           Username in case of authentication.
+        # :param password:           Password for the username.
+        # :param exchange:           Send logs using this exchange.
+        # :param declare_exchange:   Whether or not to declare the exchange.
+        # :param routing_key_format: Customize how messages will be routed to the queues.
+        # :param close_after_emit:   Close connection after emit the record?
+        # :param fields:             Send these fields as part of all logs.
+        # :param fields_under_root:  Merge the fields in the root object.
         super(RabbitMQHandlerOneWay, self).__init__(level=level)
 
         # Important instances/properties.
@@ -83,7 +79,6 @@ class RabbitMQHandlerOneWay(logging.Handler):
         """
         Connect to RabbitMQ.
         """
-
         # Set logger for pika.
         # See if something went wrong connecting to RabbitMQ.
         if not self.connection or self.connection.is_closed or not self.channel or self.channel.is_closed:
@@ -112,7 +107,6 @@ class RabbitMQHandlerOneWay(logging.Handler):
         """
         Close active connection.
         """
-
         if self.channel:
             self.channel.close()
 
@@ -163,7 +157,6 @@ class RabbitMQHandlerOneWay(logging.Handler):
         """
         Free resources.
         """
-
         self.acquire()
 
         try:
