@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import logging
+
 import pika
 from pika import credentials
-from .formatters import JSONFormatter
+
 from .filters import FieldFilter
+from .formatters import JSONFormatter
 
 
 class RabbitMQHandler(logging.Handler):

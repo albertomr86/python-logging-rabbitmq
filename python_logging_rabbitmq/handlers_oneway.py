@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import logging
 import threading
-from .compat import Queue
 
 import pika
 from pika import credentials
 
+from .compat import Queue
 from .filters import FieldFilter
 from .formatters import JSONFormatter
 
