@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 import logging
 
+from copy import copy
 import pika
 from pika import credentials
+
+from django.views.debug import ExceptionReporter
 
 from .filters import FieldFilter
 from .formatters import JSONFormatter
@@ -133,10 +136,27 @@ class RabbitMQHandler(logging.Handler):
                     level=record.levelname
                 )
 
+            if hasattr(record, 'request'):
+                no_exc_record = copy(record)
+                del no_exc_record.exc_info
+                del no_exc_record.exc_text
+                del no_exc_record.request
+
+                if record.exc_info:
+                    exc_info = record.exc_info
+                else:
+                    exc_info = (None, record.getMessage(), None)
+
+                reporter = ExceptionReporter(record.request, is_email=False, *exc_info)
+                no_exc_record.traceback = reporter.get_traceback_text()
+                formatted = self.format(no_exc_record)
+            else:
+                formatted = self.format(record)
+
             self.channel.basic_publish(
                 exchange=self.exchange,
                 routing_key=routing_key,
-                body=self.format(record),
+                body=formatted,
                 properties=pika.BasicProperties(
                     delivery_mode=2,
                     headers=self.message_headers
