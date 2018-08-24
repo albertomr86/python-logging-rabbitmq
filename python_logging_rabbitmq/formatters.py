@@ -2,6 +2,7 @@
 import logging
 from socket import gethostname
 
+from django.core.serializers.json import DjangoJSONEncoder
 from .compat import json, text_type
 
 
@@ -38,6 +39,7 @@ class JSONFormatter(logging.Formatter):
             data = {f: data[f] for f in self.include}
         elif self.exclude:
             for f in self.exclude:
-               del data[f]
+                if f in data:
+                    del data[f]
 
-        return json.dumps(data)
+        return json.dumps(data, cls=DjangoJSONEncoder)
