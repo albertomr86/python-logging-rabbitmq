@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 import logging
-
 from copy import copy
-import pika
-from pika import credentials
 
+import pika
 from django.views.debug import ExceptionReporter
+from pika import credentials
 
 from .filters import FieldFilter
 from .formatters import JSONFormatter
@@ -43,6 +42,8 @@ class RabbitMQHandler(logging.Handler):
         # :param close_after_emit:      Close connection after emit the record?
         # :param fields:                Send these fields as part of all logs.
         # :param fields_under_root:     Merge the fields in the root object.
+        # :record_fields                A set of attributes that should be preserved from the record object.
+        # :exclude_record_fields        A set of attributes that should be ignored from the record object.
         super(RabbitMQHandler, self).__init__(level=level)
 
         # Important instances/properties.
