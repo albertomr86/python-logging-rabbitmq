@@ -1,8 +1,9 @@
 # coding: utf-8
 import logging
 from socket import gethostname
-from .compat import json
-from .compat import text_type
+
+from django.core.serializers.json import DjangoJSONEncoder
+from .compat import json, text_type
 
 
 class JSONFormatter(logging.Formatter):
@@ -10,6 +11,13 @@ class JSONFormatter(logging.Formatter):
     Formatter to convert LogRecord into JSON.
     Thanks to: https://github.com/lobziik/rlog
     """
+    def __init__(self, *args, **kwargs):
+        include = kwargs.pop('include', None)
+        exclude = kwargs.pop('exclude', None)
+        super().__init__(*args, **kwargs)
+        self.include = include
+        self.exclude = exclude
+
     def format(self, record):
         data = record.__dict__.copy()
 
@@ -27,4 +35,11 @@ class JSONFormatter(logging.Formatter):
         if 'exc_info' in data and data['exc_info']:
             data['exc_info'] = self.formatException(data['exc_info'])
 
-        return json.dumps(data)
+        if self.include:
+            data = {f: data[f] for f in self.include}
+        elif self.exclude:
+            for f in self.exclude:
+                if f in data:
+                    del data[f]
+
+        return json.dumps(data, cls=DjangoJSONEncoder)
