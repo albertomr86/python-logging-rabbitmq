@@ -146,7 +146,7 @@ class RabbitMQHandlerOneWay(logging.Handler):
                 self.channel.basic_publish(
                     exchange=self.exchange,
                     routing_key=routing_key,
-                    body=self.format(record),
+                    body=record,
                     properties=pika.BasicProperties(
                         delivery_mode=2,
                         headers=self.message_headers
