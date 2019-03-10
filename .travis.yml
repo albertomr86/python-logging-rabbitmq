@@ -1,37 +1,30 @@
 language: python
 python:
-  - "2.7"
-  - "3.7"
-
-install: make
+  - 2.7
+  - 3.7
 
 branches:
   only:
     - master
 
-jobs:
+matrix:
   incude:
-    - stage: test
-      script:
-        - make test
-      python: '2.7'
-
-    - stage: test
-      script:
-        - make test
-      python: '2.7'
+    - python: 2.7
+    - python: 2.7
       env: DJANGO_VERSION=1.9
 
-    - stage: test
-      script:
-        - make test
-      python: '3.7'
-
-    - stage: test
-      script:
-        - make test
-      python: '3.7'
+    - python: 3.7
+      dist: xenial
+    - python: 3.7
+      dist: xenial
       env: DJANGO_VERSION=2.2
+
+install:
+  - pip install pipenv --upgrade
+  - pipenv install --dev
+  - if [[ -v $DJANGO_VERSION ]]; then pip install django==$DJANGO_VERSION; fi
+
+script: pipenv run py.test tests
 
 notifications:
   email:
