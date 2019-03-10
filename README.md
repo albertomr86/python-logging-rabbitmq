@@ -310,7 +310,7 @@ LOGGING = {
 ## Releases
 | Date         | Version | Notes                                                    |
 |--------------|---------|----------------------------------------------------------|
-| Mar 10, 2019 | 1.1.0   | Removed direct dependency with Django. Integration with [Travis CI](https://travis-ci.org/). Configuration for tests. Using [pipenv](https://github.com/pypa/pipenv). |
+| Mar 10, 2019 | 1.1.1   | Removed direct dependency with Django. Integration with [Travis CI](https://travis-ci.org/). Configuration for tests. Using [pipenv](https://github.com/pypa/pipenv). |
 | May 04, 2018 | 1.0.9   | Fixed exchange_type parameter in channel.exchange_declare (Thanks to [@cklos](https://github.com/cklos)). |
 | Mar 21, 2018 | 1.0.8   | Allowing message headers (Thanks to [@merretbuurman](https://github.com/merretbuurman)). |
 | May 15, 2017 | 1.0.7   | Adding support to customize the routing_key (Thanks to [@hansyulian](https://github.com/hansyulian)). |

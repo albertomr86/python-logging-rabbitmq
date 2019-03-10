@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 CLASSIFIERS = [
     'Development Status :: 5 - Production/Stable',
@@ -17,7 +17,7 @@ CLASSIFIERS = [
 ]
 
 INSTALL_REQUIRES = [
-    'pika>=0.10.0'
+    'pika>=0.10'
 ]
 
 TEST_REQUIRES = [
@@ -27,7 +27,7 @@ TEST_REQUIRES = [
 ]
 
 setup(name='python-logging-rabbitmq',
-    version='1.1.0',
+    version='1.1.1',
 
     url='https://github.com/albertomr86/python-logging-rabbitmq',
     description='Send logs to RabbitMQ from Python/Django',
@@ -40,7 +40,7 @@ setup(name='python-logging-rabbitmq',
     classifiers=CLASSIFIERS,
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*",
     install_requires=INSTALL_REQUIRES,
-    packages=find_packages(),
+    packages=['python_logging_rabbitmq'],
     extras_require={
         'dev': ['check-manifest']
     },
