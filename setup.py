@@ -11,31 +11,41 @@ CLASSIFIERS = [
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.3',
     'Programming Language :: Python :: 3.4',
-    'Programming Language :: Python :: 3.5'
+    'Programming Language :: Python :: 3.5',
+    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
 ]
 
 INSTALL_REQUIRES = [
     'pika>=0.10.0'
 ]
 
+TEST_REQUIRES = [
+    "pytest>=4.3.0",
+    "pytest-cov>=2.6.1",
+    "pytest-mock>=1.10.1",
+]
+
 setup(name='python-logging-rabbitmq',
-      version='1.0.10',
+    version='1.1.0',
 
-      url='https://github.com/albertomr86/python-logging-rabbitmq',
-      description='Send logs to RabbitMQ from Python/Django',
-      keywords='logging rabbitmq logs',
-      license='MIT',
+    url='https://github.com/albertomr86/python-logging-rabbitmq',
+    description='Send logs to RabbitMQ from Python/Django',
+    keywords='logging rabbitmq logs',
+    license='MIT',
 
-      author='Alberto Menendez Romero',
-      author_email="albertomr86@gmail.com",
+    author='Alberto Menendez Romero',
+    author_email="albertomr86@gmail.com",
 
-      classifiers=CLASSIFIERS,
-      install_requires=INSTALL_REQUIRES,
-      packages=find_packages(),
-      extras_require={
-          'dev': ['check-manifest']
-      },
+    classifiers=CLASSIFIERS,
+    python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*",
+    install_requires=INSTALL_REQUIRES,
+    packages=find_packages(),
+    extras_require={
+        'dev': ['check-manifest']
+    },
 
-      test_suite='nose.collector',
-      tests_require=['nose'],
-      zip_safe=True)
+    setup_requires=['pytest-runner'],
+    test_suite='tests',
+    tests_require=TEST_REQUIRES,
+    zip_safe=True)
