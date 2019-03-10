@@ -3,12 +3,11 @@ import logging
 from copy import copy
 
 import pika
-from django.views.debug import ExceptionReporter
 from pika import credentials
 
 from .filters import FieldFilter
 from .formatters import JSONFormatter
-
+from .compat import ExceptionReporter
 
 class RabbitMQHandler(logging.Handler):
     """
@@ -16,14 +15,14 @@ class RabbitMQHandler(logging.Handler):
     Inspired by: https://github.com/ziXiong/MQHandler
     """
     def __init__(self, level=logging.NOTSET, formatter=None,
-                 host='localhost', port=5672, connection_params=None,
-                 username=None, password=None,
-                 exchange='log', declare_exchange=False,
-                 routing_key_format="{name}.{level}",
-                 routing_key_formatter=None,
-                 close_after_emit=False,
-                 fields=None, fields_under_root=True, message_headers=None,
-                 record_fields=None, exclude_record_fields=None):
+        host='localhost', port=5672, connection_params=None,
+        username=None, password=None,
+        exchange='log', declare_exchange=False,
+        routing_key_format="{name}.{level}",
+        routing_key_formatter=None,
+        close_after_emit=False,
+        fields=None, fields_under_root=True, message_headers=None,
+        record_fields=None, exclude_record_fields=None):
         # Initialize the handler.
         #
         # :param level:                 Logs level.
@@ -44,6 +43,7 @@ class RabbitMQHandler(logging.Handler):
         # :param fields_under_root:     Merge the fields in the root object.
         # :record_fields                A set of attributes that should be preserved from the record object.
         # :exclude_record_fields        A set of attributes that should be ignored from the record object.
+
         super(RabbitMQHandler, self).__init__(level=level)
 
         # Important instances/properties.
@@ -148,8 +148,11 @@ class RabbitMQHandler(logging.Handler):
                 else:
                     exc_info = (None, record.getMessage(), None)
 
-                reporter = ExceptionReporter(record.request, is_email=False, *exc_info)
-                no_exc_record.traceback = reporter.get_traceback_text()
+                # Get a text representation of the exception.
+                if ExceptionReporter:
+                    reporter = ExceptionReporter(record.request, is_email=False, *exc_info)
+                    no_exc_record.traceback = reporter.get_traceback_text()
+
                 formatted = self.format(no_exc_record)
             else:
                 formatted = self.format(record)

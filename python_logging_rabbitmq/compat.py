@@ -13,3 +13,12 @@ try:
     import ujson as json  # noqa: F401
 except ImportError:
     import json  # noqa: F401
+
+# Support for Django.
+try:
+    from django.core.serializers.json import DjangoJSONEncoder as JSONEncoder  # noqa: F401
+    from django.views.debug import ExceptionReporter as ExceptionReporter   # noqa: F401
+    print ('django---')
+except:
+    from json.encoder import JSONEncoder as JSONEncoder  # noqa: F401
+    ExceptionReporter = None

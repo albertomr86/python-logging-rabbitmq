@@ -2,7 +2,7 @@
 import logging
 from socket import gethostname
 
-from django.core.serializers.json import DjangoJSONEncoder
+from .compat import JSONEncoder
 from .compat import json, text_type
 
 
@@ -14,7 +14,7 @@ class JSONFormatter(logging.Formatter):
     def __init__(self, *args, **kwargs):
         include = kwargs.pop('include', None)
         exclude = kwargs.pop('exclude', None)
-        super().__init__(*args, **kwargs)
+        super(JSONFormatter, self).__init__(*args, **kwargs)
         self.include = include
         self.exclude = exclude
 
@@ -42,4 +42,4 @@ class JSONFormatter(logging.Formatter):
                 if f in data:
                     del data[f]
 
-        return json.dumps(data, cls=DjangoJSONEncoder)
+        return json.dumps(data, cls=JSONEncoder)
