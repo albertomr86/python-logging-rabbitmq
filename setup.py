@@ -17,7 +17,7 @@ CLASSIFIERS = [
 ]
 
 INSTALL_REQUIRES = [
-    'pika>=0.10'
+    'pika>=0.13'
 ]
 
 TEST_REQUIRES = [
@@ -27,7 +27,7 @@ TEST_REQUIRES = [
 ]
 
 setup(name='python-logging-rabbitmq',
-    version='1.1.1',
+    version='2.0.0',
 
     url='https://github.com/albertomr86/python-logging-rabbitmq',
     description='Send logs to RabbitMQ from Python/Django',

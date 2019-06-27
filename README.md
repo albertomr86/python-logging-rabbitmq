@@ -11,6 +11,14 @@ Install using pip.
 pip install python_logging_rabbitmq
 ```
 
+### Versions
+
+| Version      | Dependency      |
+|--------------|-----------------|
+| &gt;= 2.x    |  Pika >= 0.13   |
+| <= 1.1.1     |  Pika <= 0.10   |
+
+
 ## Handlers
 This package has two built-in handlers that you can import as follows:
 
@@ -97,7 +105,7 @@ For an explanation about topics and routing keys go to https://www.rabbitmq.com/
 
 When create the handler, you're able to specify different parameters in order to connect to RabbitMQ or configure the handler behavior.
 
-## Overidding routing-key creation
+## Overriding routing-key creation
 
 If you wish to override routing-key format entirely, you can pass
 `routing_key_formatter` function which takes `LogRecord` objects and returns

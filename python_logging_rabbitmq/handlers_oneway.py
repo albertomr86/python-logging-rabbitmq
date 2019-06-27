@@ -62,7 +62,7 @@ class RabbitMQHandlerOneWay(logging.Handler):
         # @see: http://pika.readthedocs.io/en/0.10.0/modules/parameters.html#pika.connection.ConnectionParameters
         conn_params = connection_params if isinstance(connection_params, dict) else {}
         self.connection_params = conn_params.copy()
-        self.connection_params.update(dict(host=host, port=port))
+        self.connection_params.update(dict(host=host, port=port, heartbeat=0))
 
         if username and password:
             self.connection_params['credentials'] = credentials.PlainCredentials(username, password)
