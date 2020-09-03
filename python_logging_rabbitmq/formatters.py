@@ -29,7 +29,7 @@ class JSONFormatter(logging.Formatter):
         data.update(
             host=gethostname(),
             msg=msg,
-            args=tuple(text_type(arg) for arg in record.args)
+            args=tuple(text_type(arg) for arg in record.args) if record.args else None
         )
 
         if 'exc_info' in data and data['exc_info']:
