@@ -163,7 +163,8 @@ class RabbitMQHandler(logging.Handler):
                 body=formatted,
                 properties=pika.BasicProperties(
                     delivery_mode=2,
-                    headers=self.message_headers
+                    headers=self.message_headers,
+                    content_type='STRING'
                 )
             )
 
