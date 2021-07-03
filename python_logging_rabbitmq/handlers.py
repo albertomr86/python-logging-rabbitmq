@@ -18,6 +18,7 @@ class RabbitMQHandler(logging.Handler):
         host='localhost', port=5672, connection_params=None,
         username=None, password=None,
         exchange='log', declare_exchange=False,
+        remove_request=True,
         routing_key_format="{name}.{level}",
         routing_key_formatter=None,
         close_after_emit=False,
@@ -35,6 +36,7 @@ class RabbitMQHandler(logging.Handler):
         # :param password:              Password for the username.
         # :param exchange:              Send logs using this exchange.
         # :param declare_exchange:      Whether or not to declare the exchange.
+        # :param remove_request:        If true (default), remove request/exc info
         # :param routing_key_format:    Customize how messages will be routed to the queues.
         # :param routing_key_formatter: Override how messages will be routed to the queues.
         #                               Formatter is passed record object.
@@ -51,6 +53,7 @@ class RabbitMQHandler(logging.Handler):
         self.connection = None
         self.channel = None
         self.exchange_declared = not declare_exchange
+        self.remove_request = remove_request
         self.routing_key_format = routing_key_format
         self.close_after_emit = close_after_emit
 
@@ -137,7 +140,7 @@ class RabbitMQHandler(logging.Handler):
                     level=record.levelname
                 )
 
-            if hasattr(record, 'request'):
+            if self.remove_request and hasattr(record, 'request'):
                 no_exc_record = copy(record)
                 del no_exc_record.exc_info
                 del no_exc_record.exc_text

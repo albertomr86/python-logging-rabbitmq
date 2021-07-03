@@ -132,6 +132,7 @@ These are the configuration allowed:
 | password              | Provide a password for the username.                                                                                                     | None                                  |
 | exchange              | Name of the exchange to publish the logs. This exchange is considered of type topic.                                                     | log                                   |
 | declare_exchange      | Whether or not to declare the exchange.                                                                                                  | False                                 |
+| remove_request        | If True (default), remove request & exc info.                                                                                            | True                                  |
 | routing_key_format    | Customize how messages are routed to the queues.                                                                                         | {name}.{level}                        |
 | routing_key_formatter | Customize how routing-key is constructed.                                                                                                | None                                  |
 | connection_params     | Allow extra params to connect with RabbitMQ.                                                                                             | None                                  |
