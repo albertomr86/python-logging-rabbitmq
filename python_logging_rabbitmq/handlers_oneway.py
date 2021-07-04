@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import time
 import logging
 import threading
 from copy import copy
@@ -123,28 +124,33 @@ class RabbitMQHandlerOneWay(logging.Handler):
         """
         Close active connection.
         """
+        self.stopping.set()
+        while not self.stopped.is_set():
+            time.sleep(1)
         if self.channel:
-            self.channel.close()
+            del self.channel
 
         if self.connection:
-            self.connection.close()
+            del self.connection
 
         self.connection, self.channel = None, None
 
     def start_message_worker(self):
+        self.stopping = threading.Event()
+        self.stopped = threading.Event()
         worker = threading.Thread(target=self.message_worker)
         worker.setDaemon(True)
         worker.start()
 
     def message_worker(self):
-        while 1:
+        while not self.stopping.is_set():
             try:
-                record, routing_key = self.queue.get()
+                record, routing_key = self.queue.get(block=True, timeout=10)
 
                 if not self.connection or self.connection.is_closed or not self.channel or self.channel.is_closed:
                     self.open_connection()
 
-                self.channel.basic_publish(
+                res = self.channel.basic_publish(
                     exchange=self.exchange,
                     routing_key=routing_key,
                     body=record,
@@ -153,13 +159,20 @@ class RabbitMQHandlerOneWay(logging.Handler):
                         headers=self.message_headers
                     )
                 )
+
+            except Queue.Empty:
+                continue
             except Exception:
                 self.channel, self.connection = None, None
                 self.handleError(record)
             finally:
+                if self.stopping.is_set():
+                    self.stopped.set()
+                    break
                 self.queue.task_done()
                 if self.close_after_emit:
                     self.close_connection()
+        self.stopped.set()
 
     def emit(self, record):
         try:
@@ -200,6 +213,8 @@ class RabbitMQHandlerOneWay(logging.Handler):
         Free resources.
         """
         self.acquire()
+
+        del self.queue
 
         try:
             self.close_connection()
