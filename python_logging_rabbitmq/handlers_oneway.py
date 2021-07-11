@@ -25,7 +25,8 @@ class RabbitMQHandlerOneWay(logging.Handler):
         routing_key_formatter=None,
         close_after_emit=False,
         fields=None, fields_under_root=True, message_headers=None,
-        record_fields=None, exclude_record_fields=None):
+        record_fields=None, exclude_record_fields=None,
+        heartbeat=60):
         # Initialize the handler.
         #
         # :param level:                 Logs level.
@@ -44,8 +45,9 @@ class RabbitMQHandlerOneWay(logging.Handler):
         # :param close_after_emit:      Close connection after emit the record?
         # :param fields:                Send these fields as part of all logs.
         # :param fields_under_root:     Merge the fields in the root object.
-        # :record_fields                A set of attributes that should be preserved from the record object.
-        # :exclude_record_fields        A set of attributes that should be ignored from the record object.
+        # :record_fields:               A set of attributes that should be preserved from the record object.
+        # :exclude_record_fields:       A set of attributes that should be ignored from the record object.
+        # :heartbeat:                   Lower bound for heartbeat timeout.
 
         super(RabbitMQHandlerOneWay, self).__init__(level=level)
 
@@ -62,7 +64,7 @@ class RabbitMQHandlerOneWay(logging.Handler):
         # @see: http://pika.readthedocs.io/en/0.10.0/modules/parameters.html#pika.connection.ConnectionParameters
         conn_params = connection_params if isinstance(connection_params, dict) else {}
         self.connection_params = conn_params.copy()
-        self.connection_params.update(dict(host=host, port=port, heartbeat=0))
+        self.connection_params.update(dict(host=host, port=port, heartbeat=heartbeat, blocked_connection_timeout=150))
 
         if username and password:
             self.connection_params['credentials'] = credentials.PlainCredentials(username, password)
