@@ -40,11 +40,11 @@ class RabbitMQHandler(logging.Handler):
         # :param routing_key_formatter: Override how messages will be routed to the queues.
         #                               Formatter is passed record object.
         # :param close_after_emit:      Close connection after emit the record?
-        # :param fields:                 Send these fields as part of all logs.
-        # :param fields_under_root:      Merge the fields in the root object.
-        # :record_fields:                A set of attributes that should be preserved from the record object.
-        # :exclude_record_fields:        A set of attributes that should be ignored from the record object.
-        # :heartbeat:                   RabbitMQ heartbeat.
+        # :param fields:                Send these fields as part of all logs.
+        # :param fields_under_root:     Merge the fields in the root object.
+        # :record_fields:               A set of attributes that should be preserved from the record object.
+        # :exclude_record_fields:       A set of attributes that should be ignored from the record object.
+        # :heartbeat:                   Lower bound for heartbeat timeout.
 
         super(RabbitMQHandler, self).__init__(level=level)
 
