@@ -93,13 +93,13 @@ logger.addHandler(RabbitMQHandler(host='localhost', port=5672))
 
 logger.info('test info')
 logger.debug('test debug')
-logger.warn('test warning')
+logger.warning('test warning')
 ```
 
 The messages will be sent using the following routing keys:
 - myapp.INFO
 - myapp.DEBUG
-- myapp.WARN
+- myapp.WARNING
 
 For an explanation about topics and routing keys go to https://www.rabbitmq.com/tutorials/tutorial-five-python.html
 
