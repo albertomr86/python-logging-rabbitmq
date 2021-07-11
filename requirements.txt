@@ -1,1 +1,2 @@
-pika>=0.10
+-i https://pypi.org/simple/
+pika==0.13.1
