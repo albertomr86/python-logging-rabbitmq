@@ -152,19 +152,22 @@ class RabbitMQHandlerOneWay(logging.Handler):
             try:
                 record, routing_key = self.queue.get(block=True, timeout=10)
 
-                if not self.connection or self.connection.is_closed or not self.channel or self.channel.is_closed:
-                    self.open_connection()
+                try:
+                    if not self.connection or self.connection.is_closed or not self.channel or self.channel.is_closed:
+                        self.open_connection()
 
-                res = self.channel.basic_publish(
-                    exchange=self.exchange,
-                    routing_key=routing_key,
-                    body=record,
-                    properties=pika.BasicProperties(
-                        delivery_mode=2,
-                        headers=self.message_headers,
-                        content_type=self.content_type
+                    res = self.channel.basic_publish(
+                        exchange=self.exchange,
+                        routing_key=routing_key,
+                        body=record,
+                        properties=pika.BasicProperties(
+                            delivery_mode=2,
+                            headers=self.message_headers,
+                            content_type=self.content_type
+                        )
                     )
-                )
+                finally:
+                    self.queue.task_done()
 
             except Queue.Empty:
                 continue
@@ -175,7 +178,6 @@ class RabbitMQHandlerOneWay(logging.Handler):
                 if self.stopping.is_set():
                     self.stopped.set()
                     break
-                self.queue.task_done()
                 if self.close_after_emit:
                     self.close_connection()
         self.stopped.set()
