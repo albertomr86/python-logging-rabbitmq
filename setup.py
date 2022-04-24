@@ -31,7 +31,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 README = (HERE / "README.md").read_text()
 
 setup(name='python-logging-rabbitmq',
-    version='2.1.0',
+    version='2.2.0',
 
     url='https://github.com/albertomr86/python-logging-rabbitmq',
     description='Send logs to RabbitMQ from Python/Django',
