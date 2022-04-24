@@ -142,7 +142,8 @@ These are the configuration allowed:
 | message_headers       | A dictionary of headers to be published with the message.                                                                                | None                                  |
 | record_fields         | A set of attributes that should be preserved from the record object.                                                                     | None                                  |
 | exclude_record_fields | A set of attributes that should be ignored from the record object.                                                                       | None                                  |
-| heartbeat             | Lower bound for heartbeat timeout                                                                                                        | 60                                    |
+| heartbeat             | Lower bound for heartbeat timeout.                                                                                                       | 60                                    |
+| content_type          | The format of the message sent to the queue.                                                                                             | text/plain                            |
 
 
 ### Examples
