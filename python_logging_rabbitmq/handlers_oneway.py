@@ -181,6 +181,9 @@ class RabbitMQHandlerOneWay(logging.Handler):
         self.stopped.set()
 
     def emit(self, record):
+        if not hasattr(self, 'queue') or self.stopped.is_set():
+            return
+
         try:
             if self.routing_key_formatter:
                 routing_key = self.routing_key_formatter(record)
@@ -220,7 +223,8 @@ class RabbitMQHandlerOneWay(logging.Handler):
         """
         self.acquire()
 
-        del self.queue
+        if hasattr(self, 'queue'):
+            del self.queue
 
         try:
             self.close_connection()
