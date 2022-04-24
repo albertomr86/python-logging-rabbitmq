@@ -1,3 +1,4 @@
+import pathlib
 from setuptools import setup
 
 CLASSIFIERS = [
@@ -26,11 +27,16 @@ TEST_REQUIRES = [
     "pytest-mock>=1.10.1",
 ]
 
+HERE = pathlib.Path(__file__).resolve().parent
+README = (HERE / "README.md").read_text()
+
 setup(name='python-logging-rabbitmq',
-    version='2.0.0',
+    version='2.1.0',
 
     url='https://github.com/albertomr86/python-logging-rabbitmq',
     description='Send logs to RabbitMQ from Python/Django',
+    long_description=README,
+    long_description_content_type="text/markdown",
     keywords='logging rabbitmq logs',
     license='MIT',
 
