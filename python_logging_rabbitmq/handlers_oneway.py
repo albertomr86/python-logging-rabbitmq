@@ -152,7 +152,7 @@ class RabbitMQHandlerOneWay(logging.Handler):
             try:
                 record, routing_key = self.queue.get(block=True, timeout=10)
                 
-                try
+                try:
                     if not self.connection or self.connection.is_closed or not self.channel or self.channel.is_closed:
                         self.open_connection()
 
@@ -168,7 +168,7 @@ class RabbitMQHandlerOneWay(logging.Handler):
                     )
                 finally:
                     self.queue.task_done()
-                    
+
             except QueueEmpty:
                 continue
             except Exception:
