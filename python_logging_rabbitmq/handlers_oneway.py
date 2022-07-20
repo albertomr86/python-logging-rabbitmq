@@ -7,7 +7,7 @@ from copy import copy
 import pika
 from pika import credentials
 
-from .compat import Queue
+from .compat import Queue, QueueEmpty
 from .filters import FieldFilter
 from .formatters import JSONFormatter
 from .compat import ExceptionReporter
@@ -166,7 +166,7 @@ class RabbitMQHandlerOneWay(logging.Handler):
                     )
                 )
 
-            except Queue.Empty:
+            except QueueEmpty:
                 continue
             except Exception:
                 self.channel, self.connection = None, None
@@ -175,9 +175,10 @@ class RabbitMQHandlerOneWay(logging.Handler):
                 if self.stopping.is_set():
                     self.stopped.set()
                     break
-                self.queue.task_done()
-                if self.close_after_emit:
-                    self.close_connection()
+                if not self.queue.empty():
+                    self.queue.task_done()
+                    if self.close_after_emit:
+                        self.close_connection()
         self.stopped.set()
 
     def emit(self, record):
