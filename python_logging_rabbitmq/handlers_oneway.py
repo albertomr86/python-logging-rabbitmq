@@ -107,6 +107,9 @@ class RabbitMQHandlerOneWay(logging.Handler):
             handler = logging.StreamHandler()
             handler.setFormatter(self.formatter)
             rabbitmq_logger = logging.getLogger('pika')
+            rabbitmq_logger_propagate = rabbitmq_logger.propagate
+            rabbitmq_logger_level = rabbitmq_logger.level
+
             rabbitmq_logger.addHandler(handler)
             rabbitmq_logger.propagate = False
             rabbitmq_logger.setLevel(logging.WARNING)
@@ -123,6 +126,8 @@ class RabbitMQHandlerOneWay(logging.Handler):
                 self.exchange_declared = True
 
             # Manually remove logger to avoid shutdown message.
+            rabbitmq_logger.propagate = rabbitmq_logger_propagate
+            rabbitmq_logger.setlevel(rabbitmq_logger_level)
             rabbitmq_logger.removeHandler(handler)
 
     def close_connection(self):
