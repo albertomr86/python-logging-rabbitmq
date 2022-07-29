@@ -172,7 +172,8 @@ class RabbitMQHandlerOneWay(logging.Handler):
                         )
                     )
                 finally:
-                    self.queue.task_done()
+                    if not hasattr(self, 'queue'):
+                        self.queue.task_done()
 
             except QueueEmpty:
                 continue
