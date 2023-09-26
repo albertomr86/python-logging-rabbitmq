@@ -127,7 +127,7 @@ class RabbitMQHandlerOneWay(logging.Handler):
 
             # Manually remove logger to avoid shutdown message.
             rabbitmq_logger.propagate = rabbitmq_logger_propagate
-            rabbitmq_logger.setlevel(rabbitmq_logger_level)
+            rabbitmq_logger.setLevel(rabbitmq_logger_level)
             rabbitmq_logger.removeHandler(handler)
 
     def close_connection(self):
@@ -161,7 +161,7 @@ class RabbitMQHandlerOneWay(logging.Handler):
                     if not self.connection or self.connection.is_closed or not self.channel or self.channel.is_closed:
                         self.open_connection()
 
-                    res = self.channel.basic_publish(
+                    self.channel.basic_publish(
                         exchange=self.exchange,
                         routing_key=routing_key,
                         body=record,
@@ -172,7 +172,7 @@ class RabbitMQHandlerOneWay(logging.Handler):
                         )
                     )
                 finally:
-                    if not hasattr(self, 'queue'):
+                    if hasattr(self, 'queue'):
                         self.queue.task_done()
 
             except QueueEmpty:
