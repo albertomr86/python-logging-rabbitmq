@@ -7,7 +7,7 @@ from copy import copy
 import pika
 from pika import credentials
 
-from .compat import Queue
+from .compat import Queue, QueueEmpty
 from .filters import FieldFilter
 from .formatters import JSONFormatter
 from .compat import ExceptionReporter
@@ -110,6 +110,9 @@ class RabbitMQHandlerOneWay(logging.Handler):
             handler = logging.StreamHandler()
             handler.setFormatter(self.formatter)
             rabbitmq_logger = logging.getLogger('pika')
+            rabbitmq_logger_propagate = rabbitmq_logger.propagate
+            rabbitmq_logger_level = rabbitmq_logger.level
+
             rabbitmq_logger.addHandler(handler)
             rabbitmq_logger.propagate = False
             rabbitmq_logger.setLevel(logging.WARNING)
@@ -126,6 +129,8 @@ class RabbitMQHandlerOneWay(logging.Handler):
                 self.exchange_declared = True
 
             # Manually remove logger to avoid shutdown message.
+            rabbitmq_logger.propagate = rabbitmq_logger_propagate
+            rabbitmq_logger.setLevel(rabbitmq_logger_level)
             rabbitmq_logger.removeHandler(handler)
 
     def close_connection(self):
@@ -154,22 +159,26 @@ class RabbitMQHandlerOneWay(logging.Handler):
         while not self.stopping.is_set():
             try:
                 record, routing_key = self.queue.get(block=True, timeout=10)
+                
+                try:
+                    if not self.connection or self.connection.is_closed or not self.channel or self.channel.is_closed:
+                        self.open_connection()
 
-                if not self.connection or self.connection.is_closed or not self.channel or self.channel.is_closed:
-                    self.open_connection()
-
-                res = self.channel.basic_publish(
-                    exchange=self.exchange,
-                    routing_key=routing_key,
-                    body=record,
-                    properties=pika.BasicProperties(
-                        delivery_mode=2,
-                        headers=self.message_headers,
-                        content_type=self.content_type
+                    self.channel.basic_publish(
+                        exchange=self.exchange,
+                        routing_key=routing_key,
+                        body=record,
+                        properties=pika.BasicProperties(
+                            delivery_mode=2,
+                            headers=self.message_headers,
+                            content_type=self.content_type
+                        )
                     )
-                )
+                finally:
+                    if hasattr(self, 'queue'):
+                        self.queue.task_done()
 
-            except Queue.Empty:
+            except QueueEmpty:
                 continue
             except Exception:
                 self.channel, self.connection = None, None
@@ -178,7 +187,6 @@ class RabbitMQHandlerOneWay(logging.Handler):
                 if self.stopping.is_set():
                     self.stopped.set()
                     break
-                self.queue.task_done()
                 if self.close_after_emit:
                     self.close_connection()
         self.stopped.set()
