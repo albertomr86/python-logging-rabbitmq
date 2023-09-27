@@ -55,7 +55,7 @@
 - PR#7 Fixed `exchange_type` parameter in `channel.exchange_declare` (Thanks to [@cklos](https://github.com/cklos)).
 
 
-# v1.0.8 (2018-05-21)
+# v1.0.8 (2018-03-22)
 
 ### Features
 
@@ -69,7 +69,7 @@
 - Added support to customize the `routing_key` (Thanks to [@hansyulian](https://github.com/hansyulian)).
 
 
-# v1.0.6 (2017-03-30)
+# v1.0.6 (2017-03-29)
 
 ### Fixes
 
@@ -83,19 +83,19 @@
 - Explicit local imports.
 
 
-# v1.0.4 (2017-03-16)
+# v1.0.4 (2017-03-15)
 
 ### Features
 
 - PR#1 Added new handler `RabbitMQHandlerOneWay` (by [@wallezhang](https://github.com/wallezhang)). 
 
 
-# v1.0.3 (2017-03-14)
+# v1.0.3 (2017-03-13)
 
 - Added config parameter `close_after_emit`. Close connection after emit the record.
 
 
-# v1.0.2 (2016-12-21)
+# v1.0.2 (2016-12-23)
 
 ### Features
 
