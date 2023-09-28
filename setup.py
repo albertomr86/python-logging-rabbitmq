@@ -15,6 +15,8 @@ CLASSIFIERS = [
     'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6',
     'Programming Language :: Python :: 3.7',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
 ]
 
 INSTALL_REQUIRES = [
@@ -31,7 +33,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 README = (HERE / "README.md").read_text()
 
 setup(name='python-logging-rabbitmq',
-    version='2.2.0',
+    version='2.3.0',
 
     url='https://github.com/albertomr86/python-logging-rabbitmq',
     description='Send logs to RabbitMQ from Python/Django',

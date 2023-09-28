@@ -319,25 +319,8 @@ LOGGING = {
 ```
 
 ## Releases
-| Date         | Version | Notes                                                    |
-|--------------|---------|----------------------------------------------------------|
-| Apr 24, 2022 | 2.2.0   | Handling thread shutdown (Thanks to [@donbowman](https://github.com/donbowman)). |
-| Mar 10, 2019 | 1.1.1   | Removed direct dependency with Django. Integration with [Travis CI](https://travis-ci.org/). Configuration for tests. Using [pipenv](https://github.com/pypa/pipenv). |
-| May 04, 2018 | 1.0.9   | Fixed exchange_type parameter in channel.exchange_declare (Thanks to [@cklos](https://github.com/cklos)). |
-| Mar 21, 2018 | 1.0.8   | Allowing message headers (Thanks to [@merretbuurman](https://github.com/merretbuurman)). |
-| May 15, 2017 | 1.0.7   | Adding support to customize the routing_key (Thanks to [@hansyulian](https://github.com/hansyulian)). |
-| Mar 30, 2017 | 1.0.6   | Fix compatibility with python3 in RabbitMQHandlerOneWay (by [@sactre](https://github.com/sactre)). |
-| Mar 28, 2017 | 1.0.5   | Explicit local imports.                                  |
-| Mar 16, 2017 | 1.0.4   | Added new handler RabbitMQHandlerOneWay (by [@wallezhang](https://github.com/wallezhang)). |
-| Mar 14, 2017 | 1.0.3   | Added config parameter close_after_emit.                 |
-| Dec 21, 2016 | 1.0.2   | Minor fixes.                                             |
-| Dec 21, 2016 | 1.0.1   | Minor fixes.                                             |
-| Dec 21, 2016 | 1.0.0   | Initial release.                                         |
 
-## What's next?
-- Let's talk about tests.
-- Issues, pull requests, suggestions are welcome.
-- Fork and improve it. Free for all.
+[CHANGELOG](./CHANGELOG.md)
 
 ## Similar efforts
 - MQHandler (https://github.com/ziXiong/MQHandler)
