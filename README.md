@@ -1,6 +1,10 @@
 # python-logging-rabbitmq
 
-[![Build Status](https://travis-ci.org/albertomr86/python-logging-rabbitmq.svg?branch=master)](https://travis-ci.org/albertomr86/python-logging-rabbitmq)
+![Package License](https://img.shields.io/github/license/albertomr86/python-logging-rabbitmq)
+![PyPI - Version](https://img.shields.io/pypi/v/python_logging_rabbitmq)
+![PyPI - Wheel](https://img.shields.io/pypi/wheel/python_logging_rabbitmq)
+![Build Status](https://github.com/albertomr86/python-logging-rabbitmq/workflows/ci/badge.svg)
+
 
 Logging handler to ships logs to RabbitMQ. Compatible with Django.
 
