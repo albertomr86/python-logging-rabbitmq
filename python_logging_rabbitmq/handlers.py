@@ -25,7 +25,8 @@ class RabbitMQHandler(logging.Handler):
         fields=None, fields_under_root=True, message_headers=None,
         record_fields=None, exclude_record_fields=None,
         heartbeat=60,
-        content_type='text/plain'):
+        content_type='text/plain',
+        expiration=None):
         # Initialize the handler.
         #
         # :param level:                 Logs level.
@@ -49,6 +50,7 @@ class RabbitMQHandler(logging.Handler):
         # :exclude_record_fields:       A set of attributes that should be ignored from the record object.
         # :heartbeat:                   Lower bound for heartbeat timeout.
         # :content_type:                The format of the message sent to the queue.
+        # :expiration:                  Expiry time (ms) for RabbitMQ messages (str or None).
 
         super(RabbitMQHandler, self).__init__(level=level)
 
@@ -74,6 +76,7 @@ class RabbitMQHandler(logging.Handler):
         # Extra params for message publication
         self.message_headers = message_headers
         self.content_type = content_type
+        self.expiration = expiration
 
         # Save routing-key formatter.
         self.routing_key_formatter = routing_key_formatter
@@ -172,6 +175,7 @@ class RabbitMQHandler(logging.Handler):
                 properties=pika.BasicProperties(
                     delivery_mode=2,
                     headers=self.message_headers,
+                    expiration=self.expiration,
                     content_type=self.content_type
                 )
             )
