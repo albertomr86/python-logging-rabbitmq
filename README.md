@@ -134,6 +134,7 @@ These are the configuration allowed:
 | port                  | RabbitMQ Server port.                                                                                                                    | 5672                                  |
 | username              | Username for authentication.                                                                                                             | None                                  |
 | password              | Provide a password for the username.                                                                                                     | None                                  |
+| url                   | AMQP url to use instead of host/port/username/password.                                                                                  | None                                  |
 | exchange              | Name of the exchange to publish the logs. This exchange is considered of type topic.                                                     | log                                   |
 | declare_exchange      | Whether or not to declare the exchange.                                                                                                  | False                                 |
 | remove_request        | If True (default), remove request & exc info.                                                                                            | True                                  |
@@ -155,6 +156,7 @@ These are the configuration allowed:
 #### RabbitMQ Connection
 
 ```python
+# via host, port, username, password
 rabbit = RabbitMQHandler(
 	host='localhost',
 	port=5672,
@@ -165,6 +167,13 @@ rabbit = RabbitMQHandler(
 		'connection_attempts': 3,
 		'socket_timeout': 5000
 	}
+)
+```
+
+```python
+# via url
+rabbit = RabbitMQHandler(
+	url=amqps://guest:guest@example.host/vhost-example
 )
 ```
 
