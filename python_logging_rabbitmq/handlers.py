@@ -16,7 +16,7 @@ class RabbitMQHandler(logging.Handler):
     """
     def __init__(self, level=logging.NOTSET, formatter=None,
         host='localhost', port=5672, connection_params=None,
-        username=None, password=None,
+        username=None, password=None, url=None,
         exchange='log', declare_exchange=False,
         remove_request=True,
         routing_key_format="{name}.{level}",
@@ -36,6 +36,7 @@ class RabbitMQHandler(logging.Handler):
         # :param message_headers:       A dictionary of headers to be published with the message. Optional.
         # :param username:              Username in case of authentication.
         # :param password:              Password for the username.
+        # :param url:                   AMQP url to be used instead of username/password/host/port.
         # :param exchange:              Send logs using this exchange.
         # :param declare_exchange:      Whether or not to declare the exchange.
         # :param remove_request:        If true (default), remove request/exc info
@@ -56,6 +57,7 @@ class RabbitMQHandler(logging.Handler):
         self.exchange = exchange
         self.connection = None
         self.channel = None
+        self._url = url
         self.exchange_declared = not declare_exchange
         self.remove_request = remove_request
         self.routing_key_format = routing_key_format
@@ -106,7 +108,12 @@ class RabbitMQHandler(logging.Handler):
         rabbitmq_logger.setLevel(logging.WARNING)
 
         if not self.connection or self.connection.is_closed:
-            self.connection = pika.BlockingConnection(pika.ConnectionParameters(**self.connection_params))
+            parameters = None
+            if self._url:
+                parameters = pika.URLParameters(self._url)
+            else:
+                parameters = pika.ConnectionParameters(**self.connection_params)
+            self.connection = pika.BlockingConnection(parameters)
 
         if not self.channel or self.channel.is_closed:
             self.channel = self.connection.channel()
